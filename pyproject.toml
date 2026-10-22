@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parasito-esolang"
+version = "2.0.0"
+authors = [
+  { name = "Cristian García", email = "cristiangarciadelolmo06@gmail.com" }
+]
+description = "Steganographic Esoteric Programming Language (Esolang) & Covert Channel Execution Engine living inside Python comments."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+    "Topic :: Software Development :: Compilers",
+    "Topic :: Software Development :: Interpreters",
+]
+
+[project.scripts]
+parasito = "parasito.cli:main"

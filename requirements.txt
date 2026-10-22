@@ -1,0 +1,1 @@
+# Parásito está diseñado con cero dependencias externas (utiliza únicamente la biblioteca estándar de Python).

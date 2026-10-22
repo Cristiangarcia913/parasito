@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>🦠 Parásito — ISA Cheat Sheet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;700;900&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a25;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+      --accent3: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d2d45;
+      --glow: rgba(124, 58, 237, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 8mm;
+      font-size: 9pt;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #0f0f1e 0%, #1e0a3c 50%, #0a1a2e 100%);
+      border: 1.5px solid var(--accent);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .header-left { flex: 1; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20pt;
+      font-weight: 800;
+      background: linear-gradient(90deg, #a78bfa, #06b6d4, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+
+    .header .subtitle {
+      font-size: 7pt;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .badge-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 7pt;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 1px;
+    }
+    .badge-red    { background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+    .badge-purple { background: #2e1065; color: #c4b5fd; border: 1px solid #7c3aed; }
+    .badge-cyan   { background: #083344; color: #67e8f9; border: 1px solid #06b6d4; }
+
+    /* ── CAPA EXPLAINER ── */
+    .layers-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .layer-card {
+      background: var(--surface);
+      border-radius: 6px;
+      padding: 7px 9px;
+      border-left: 3px solid;
+    }
+    .layer-card.l1 { border-color: var(--accent3); }
+    .layer-card.l2 { border-color: var(--accent); }
+    .layer-card.l3 { border-color: var(--accent2); }
+
+    .layer-card .layer-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 2px;
+    }
+    .layer-card .layer-name {
+      font-weight: 700;
+      font-size: 9.5pt;
+      margin-bottom: 2px;
+    }
+    .layer-card.l1 .layer-name { color: var(--accent3); }
+    .layer-card.l2 .layer-name { color: var(--accent); }
+    .layer-card.l3 .layer-name { color: var(--accent2); }
+    .layer-card .layer-desc { font-size: 7.5pt; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── REGLA PRINCIPAL ── */
+    .rule-box {
+      background: linear-gradient(90deg, #1a0a2e, #0a1a1a);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 12px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .rule-box .icon { font-size: 20pt; }
+
+    .rule-box .rule-text { font-size: 8.5pt; line-height: 1.6; }
+
+    .rule-box .rule-text strong {
+      color: #c4b5fd;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .example-line {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      background: #0d0d1a;
+      border: 1px solid #2d2d45;
+      border-radius: 4px;
+      padding: 5px 8px;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .w-odd  { color: #a78bfa; font-weight: 700; }
+    .w-even { color: #06b6d4; }
+    .w-acro { text-decoration: underline; text-underline-offset: 2px; color: #06b6d4; }
+
+    /* ── ISA TABLE ── */
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      margin-bottom: 6px;
+    }
+
+    th {
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 6.5pt;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 7px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 4px 7px;
+      border-bottom: 1px solid #1e1e2e;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    tr:hover td { background: #12121f; }
+
+    .cmd {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #a78bfa;
+      white-space: nowrap;
+    }
+
+    .synonyms {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      color: var(--accent2);
+    }
+
+    .cat-label {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 6pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .cat-mem     { background: #1e0a3c; color: #c4b5fd; border: 1px solid #7c3aed; }
+    .cat-arith   { background: #0a2010; color: #6ee7b7; border: 1px solid #10b981; }
+    .cat-flow    { background: #0a1420; color: #67e8f9; border: 1px solid #06b6d4; }
+    .cat-io      { background: #1a1000; color: #fde68a; border: 1px solid #f59e0b; }
+    .cat-infect  { background: #200a0a; color: #fca5a5; border: 1px solid #ef4444; }
+
+    .desc { color: var(--text); }
+
+    /* ── LAYOUT COLUMNS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* ── EXAMPLE BOX ── */
+    .example-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    .example-box pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .comment-line { color: #4a4a6a; }
+    .comment-odd  { color: #a78bfa; }
+    .comment-even { color: #06b6d4; }
+    .comment-note { color: var(--text-muted); font-style: italic; }
+
+    /* ── CHEATSHEET MINI FOOTER ── */
+    .virus-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0d0d1a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 7pt;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 4px;
+    }
+
+    .virus-footer .glow-text {
+      color: #ef4444;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* ── INFECCIÓN VISUAL ── */
+    .infection-steps {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .step:last-child { margin-bottom: 0; }
+
+    .step-num {
+      background: var(--accent);
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 7pt;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text { font-size: 7.5pt; line-height: 1.5; }
+    .step-text strong { color: #c4b5fd; font-family: 'JetBrains Mono', monospace; font-size: 7pt; }
+
+    /* PRINT */
+    @media print {
+      body { background: white; color: black; width: 210mm; padding: 8mm; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>🦠 PARÁSITO</h1>
+      <div class="subtitle">ISA Reference Card · Lenguaje de Programación Esteganográfico · v1.0</div>
+    </div>
+    <div class="badge-zone">
+      <span class="badge badge-red">⚠ USB CONTAGIADO / ACTIVO</span>
+      <span class="badge badge-purple">ESOLANG · ESTEGANOGRAFÍA</span>
+      <span class="badge badge-cyan">VECTOR FÍSICO DE INFECCIÓN</span>
+    </div>
+  </div>
+
+  <!-- 3 CAPAS -->
+  <div class="layers-row">
+    <div class="layer-card l1">
+      <div class="layer-num">Capa 1</div>
+      <div class="layer-name">🐍 Anfitrión</div>
+      <div class="layer-desc">Python lo ejecuta normalmente. El comentario es ignorado.</div>
+    </div>
+    <div class="layer-card l2">
+      <div class="layer-num">Capa 2</div>
+      <div class="layer-name">🦠 Parásito</div>
+      <div class="layer-desc">La VM ejecuta palabras en posición IMPAR (1ª, 3ª, 5ª…)</div>
+    </div>
+    <div class="layer-card l3">
+      <div class="layer-num">Capa 3</div>
+      <div class="layer-name">👻 Fantasma</div>
+      <div class="layer-desc">La 1ª letra de cada palabra PAR forma un acróstico oculto.</div>
+    </div>
+  </div>
+
+  <!-- REGLA + EJEMPLO -->
+  <div class="rule-box">
+    <div class="icon">🔬</div>
+    <div class="rule-text" style="flex:1">
+      <strong>REGLA DE LA IMPARIDAD</strong> — Comentarios como texto técnico con doble fondo:<br>
+      <div class="example-line">
+        #&nbsp;<span class="w-odd">Limpiar</span>&nbsp;<span class="w-even">N</span><span class="w-even">odo</span>&nbsp;&nbsp;
+        <span class="w-odd">Almacenar</span>&nbsp;<span class="w-even">U</span><span class="w-even">suario</span>&nbsp;&nbsp;
+        <span class="w-odd">"LOS_NUMEROS"</span>&nbsp;<span class="w-even">M</span><span class="w-even">odulo</span>&nbsp;&nbsp;
+        <span class="w-odd">Unir</span>&nbsp;<span class="w-even">B</span><span class="w-even">uffer</span>&nbsp;&nbsp;
+        <span class="w-odd">"SON_SOLO"</span>&nbsp;<span class="w-even">E</span><span class="w-even">ntrada</span>&nbsp;&nbsp;
+        <span class="w-odd">Expresar</span>&nbsp;<span class="w-even">R</span><span class="w-even">ed</span>&nbsp;&nbsp;
+        <span class="w-odd">Linea</span>&nbsp;<span class="w-even">S</span><span class="w-even">istema</span>
+      </div>
+      → <span style="color:#a78bfa">Parásito ejecuta:</span> <code style="font-family:'JetBrains Mono',monospace;font-size:7.5pt">limpiar → guardar "LOS_NUMEROS" → unir "SON_SOLO" → mostrar → salto</code>
+      &nbsp;&nbsp;|&nbsp;&nbsp; <span style="color:#06b6d4">Fantasma:</span> <strong style="color:#06b6d4;font-family:'JetBrains Mono',monospace">NUMBERS</strong>
+    </div>
+  </div>
+
+  <!-- ISA TABLE -->
+  <div class="section-title">📋 TABLA DE INSTRUCCIONES — ISA COMPLETA</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Cat.</th>
+        <th>Comando Principal</th>
+        <th>Sinónimos válidos</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- MEMORIA -->
+      <tr>
+        <td><span class="cat-label cat-mem">MEM</span></td>
+        <td><span class="cmd">limpiar</span></td>
+        <td><span class="synonyms">resetear, borrar</span></td>
+        <td class="desc">Resetea acumulador, variables y resultado de salida.</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-mem">MEM</span></td>
+        <td><span class="cmd">guardar &lt;val&gt;</span></td>
+        <td><span class="synonyms">almacenar, setear, asignar</span></td>
+        <td class="desc">Carga <code style="font-family:'JetBrains Mono',monospace">&lt;val&gt;</code> en el acumulador (literal o variable).</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-mem">MEM</span></td>
+        <td><span class="cmd">archivar &lt;var&gt;</span></td>
+        <td><span class="synonyms">registrar, guardar_var</span></td>
+        <td class="desc">Guarda el acumulador en la variable <code style="font-family:'JetBrains Mono',monospace">&lt;var&gt;</code>.</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-mem">MEM</span></td>
+        <td><span class="cmd">recordar &lt;var&gt;</span></td>
+        <td><span class="synonyms">cargar, recuperar</span></td>
+        <td class="desc">Carga la variable <code style="font-family:'JetBrains Mono',monospace">&lt;var&gt;</code> en el acumulador.</td>
+      </tr>
+      <!-- ARITMÉTICA -->
+      <tr>
+        <td><span class="cat-label cat-arith">ARITH</span></td>
+        <td><span class="cmd">sumar &lt;val&gt;</span></td>
+        <td><span class="synonyms">adicionar, incrementar</span></td>
+        <td class="desc">Acumulador ← Acumulador + &lt;val&gt;</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-arith">ARITH</span></td>
+        <td><span class="cmd">restar &lt;val&gt;</span></td>
+        <td><span class="synonyms">sustraer, decrementar</span></td>
+        <td class="desc">Acumulador ← Acumulador − &lt;val&gt;</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-arith">ARITH</span></td>
+        <td><span class="cmd">multiplicar &lt;val&gt;</span></td>
+        <td><span class="synonyms">escalar</span></td>
+        <td class="desc">Acumulador ← Acumulador × &lt;val&gt;</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-arith">ARITH</span></td>
+        <td><span class="cmd">dividir &lt;val&gt;</span></td>
+        <td><span class="synonyms">partir</span></td>
+        <td class="desc">Acumulador ← Acumulador ÷ &lt;val&gt; (seguro contra ÷0)</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-arith">ARITH</span></td>
+        <td><span class="cmd">unir &lt;val&gt;</span></td>
+        <td><span class="synonyms">concatenar, anexar</span></td>
+        <td class="desc">Acumulador ← Acumulador + <em>str</em>(&lt;val&gt;) — concatenación.</td>
+      </tr>
+      <!-- CONTROL -->
+      <tr>
+        <td><span class="cat-label cat-flow">FLOW</span></td>
+        <td><span class="cmd">destino &lt;id&gt;</span></td>
+        <td><span class="synonyms">etiqueta, marca, nodo</span></td>
+        <td class="desc">Define etiqueta de salto <code style="font-family:'JetBrains Mono',monospace">&lt;id&gt;</code> (invisible en ejecución).</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-flow">FLOW</span></td>
+        <td><span class="cmd">saltar &lt;id&gt;</span></td>
+        <td><span class="synonyms">ir, brincar</span></td>
+        <td class="desc">Salto incondicional → <code style="font-family:'JetBrains Mono',monospace">&lt;id&gt;</code></td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-flow">FLOW</span></td>
+        <td><span class="cmd">revisar &lt;id&gt;</span></td>
+        <td><span class="synonyms">evaluar, comprobar, validar</span></td>
+        <td class="desc">Salto condicional → <code style="font-family:'JetBrains Mono',monospace">&lt;id&gt;</code> solo si Acumulador &gt; 0</td>
+      </tr>
+      <!-- I/O -->
+      <tr>
+        <td><span class="cat-label cat-io">I/O</span></td>
+        <td><span class="cmd">mostrar</span></td>
+        <td><span class="synonyms">imprimir, expresar, revelar</span></td>
+        <td class="desc">Imprime el acumulador en la salida del Parásito.</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-io">I/O</span></td>
+        <td><span class="cmd">espacio</span></td>
+        <td><span class="synonyms">blank</span></td>
+        <td class="desc">Añade un espacio en blanco a la salida.</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-io">I/O</span></td>
+        <td><span class="cmd">salto</span></td>
+        <td><span class="synonyms">linea</span></td>
+        <td class="desc">Añade un salto de línea <code style="font-family:'JetBrains Mono',monospace">\n</code> a la salida.</td>
+      </tr>
+      <!-- INFECCIÓN -->
+      <tr>
+        <td><span class="cat-label cat-infect">INF</span></td>
+        <td><span class="cmd">secreto &lt;msg&gt;</span></td>
+        <td><span class="synonyms">ocultar</span></td>
+        <td class="desc">⚠ Escribe <code style="font-family:'JetBrains Mono',monospace">.parasito_secret.txt</code> en el Escritorio con &lt;msg&gt;.</td>
+      </tr>
+      <tr>
+        <td><span class="cat-label cat-infect">INF</span></td>
+        <td><span class="cmd">infectar &lt;ruta&gt;</span></td>
+        <td><span class="synonyms">propagar, infiltrar</span></td>
+        <td class="desc">⚠ Inyecta código Parásito en el archivo &lt;ruta&gt; objetivo.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DOS COLUMNAS: DEMO PASOS + EJEMPLO CÓDIGO -->
+  <div class="two-col">
+
+    <!-- CÓMO EJECUTAR LA DEMO -->
+    <div>
+      <div class="section-title">🚀 DEMO — PENDRIVE INFECTADO</div>
+      <div class="infection-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Inserta el pendrive y abre la carpeta.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Ejecuta <strong>lanzar_demo.bat</strong> (doble clic).</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Aparece la <strong>Calculadora Corporativa v4.0</strong>. Realiza cualquier cálculo.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Selecciona <strong>[0] Salir</strong>. El Parásito se despierta.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">La VM imprime el análisis esteganográfico y el acróstico <strong>NUMBERS</strong>.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-text">Busca <strong>.parasito_secret.txt</strong> en el Escritorio → el mensaje secreto <strong>LA_CALCULADORA_TE_VIGILA</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNIPPET DE CÓDIGO DISECCIONADO -->
+    <div>
+      <div class="section-title">🔬 DISECCIÓN — CÓDIGO DE prueba4.py</div>
+      <div class="example-box">
+        <pre><span class="comment-note"># Comentario real (capa Python — ignorado)</span>
+<span class="comment-line"># </span><span class="comment-odd">Limpiar</span> <span class="comment-even">Nodo</span>
+<span class="comment-line"># </span><span class="comment-odd">Almacenar</span> <span class="comment-even">Usuario</span> <span class="comment-odd">"LOS_NUMEROS_"</span> <span class="comment-even">Modulo</span>
+<span class="comment-line"># </span><span class="comment-odd">Unir</span> <span class="comment-even">Buffer</span> <span class="comment-odd">"SON_SOLO_"</span> <span class="comment-even">Entrada</span>
+<span class="comment-line"># </span><span class="comment-odd">Unir</span> <span class="comment-even">Registro</span> <span class="comment-odd">"ILUSIONES..."</span> <span class="comment-even">Sistema</span>
+<span class="comment-line"># </span><span class="comment-odd">Expresar</span> <span class="comment-even">Sistema</span>
+<span class="comment-line"># </span><span class="comment-odd">Linea</span> <span class="comment-even">Servidor</span>
+<span class="comment-line"># </span><span class="comment-odd">Almacenar</span> <span class="comment-even">Servidor</span> <span class="comment-odd">"EL_PARASITO_"</span> <span class="comment-even">Red</span>
+<span class="comment-line"># </span><span class="comment-odd">Unir</span> <span class="comment-even">Sistema</span> <span class="comment-odd">"SI_ES_REAL."</span> <span class="comment-even">Sistema</span>
+<span class="comment-line"># </span><span class="comment-odd">Expresar</span> <span class="comment-even">Sistema</span>
+<span class="comment-line"># </span><span class="comment-odd">Ocultar</span> <span class="comment-even">Servidor</span> <span class="comment-odd">"LA_CALCULADORA_TE_VIGILA"</span> <span class="comment-even">Sistema</span>
+
+<span class="comment-note"># Palabras impares  → programa Parásito</span>
+<span class="comment-note"># Palabras pares    → acróstico: NUMBERS</span>
+<span class="comment-note"># Resultado VM:</span>
+<span class="comment-note">#   LOS_NUMEROS_ SON_SOLO_ ILUSIONES...</span>
+<span class="comment-note">#   EL_PARASITO_ SI_ES_REAL.</span>
+<span class="comment-note"># Escritorio: .parasito_secret.txt</span>
+        </pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="virus-footer">
+    <span>🦠 <span class="glow-text">PARÁSITO v1.0</span> — El código que ves hace una cosa; los comentarios que ignoras hacen otra.</span>
+    <span style="color:#4a4a6a">python prueba1.py · prueba2.py · prueba3.py · prueba4.py</span>
+    <span style="color:#4a4a6a">2026 · ESOLANG</span>
+  </div>
+
+</body>
+</html>
